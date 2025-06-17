@@ -5,7 +5,7 @@ This repository contains code for fine-scale prediction of **permafrost presence
 ## 📁 Repository Structure
 
 - `RF/` — Implements a traditional **Random Forest** model for soil and permafrost prediction.
-- `MISO/` — Implements **MISO**, a multimodal vision-based deep learning model that integrates satellite imagery and geospatial covariates.
+- `MISO/` — Implements **MISO**, a multimodal vision-based deep learning model that integrates integrates a pretrained geospatial foundation model based on the SWIN Transformer [1], implicit image functions for continuous spatial prediction [2], and contrastive learning for multimodal feature alignment and geo-location awareness.
 
 ## 🚀 Running Commands
 
@@ -40,3 +40,12 @@ python demo.py \
 - All models use Alaska’s soil observation dataset (AKSDB) and derive fine-scale predictions at 10-meter resolution.
 - Inference outputs are saved as `.tif` files for spatial analysis or visualization in GIS software.
 - The project supports k-fold cross-validation for robust evaluation.
+
+
+## 📚 References
+
+[1] Bastani, F., Wolters, P., Gupta, R., Ferdinando, J., & Kembhavi, A. (2023). Satlaspretrain: A large-scale dataset for remote sensing image understanding. In Proceedings of the IEEE/CVF International Conference on Computer Vision.
+
+[2] Chen, Y., Liu, S., & Wang, X. (2021). Learning continuous image representation with local implicit image function. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition.
+
+
