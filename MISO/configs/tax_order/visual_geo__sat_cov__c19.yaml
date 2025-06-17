@@ -1,0 +1,27 @@
+OUTPUT: "./_runs/"
+VAR_NAME: "tax_order"
+EXP_NAME: "sat_cov__uotr05__c19"
+
+MODEL:
+  DECODER: "visual_geo_dual" 
+    
+DATA:
+  OUT_DIM: 7
+  USE_NEIGHBOR_LABELS: False
+  USE_OTHER_TILES_RATIO: 0.5
+  SAT:
+    USE_SAT: True
+    NUM_BANDS: 9
+  DEM:
+    USE_DEM: False
+  CLM:
+    USE_CLM: False
+  COV:
+    USE_COV: True
+    NUM_BANDS: 10
+
+TRAIN:
+  BATCH_SIZE: 32
+  BASE_LOSS: "ce"
+  EARLY_STOP_CRITERIA: "neg_accuracy"
+  AUX_LOSSES: ['geo', 'vg_nce', 'sat_cov_nce']
