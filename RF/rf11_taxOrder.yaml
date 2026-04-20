@@ -1,0 +1,15 @@
+# Paths
+fold_pt: sfold5_5km_split_train_test_indices.json"
+sat_data_pt: "point_pixel_satbands_gt_epsg4326_v4_removednodata.geojson"
+topo_data_pt: "point_pixel_ifsar_derivs_v1.csv"
+climate_data_pt: "point_pixel_climate_v1.csv"
+json_gt: "mapped-aksdb-point-data-v0.2.json"
+
+# Task
+task_name: "tax_order"   # options: tax_order, nsp, peat_level
+
+# Output
+outroot: "outputs/RF11_TaxOrder_5kmFolds"
+
+# Flags
+save_weights: False

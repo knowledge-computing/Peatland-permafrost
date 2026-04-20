@@ -11,7 +11,7 @@ This repository contains code for fine-scale prediction of **permafrost presence
 
 ### 🔧 Training
 
-To train a model (e.g., on the AKSDB permafrost binary dataset with satellite and geospatial covariates):
+To train a model with MISO (e.g., on the AKSDB permafrost binary dataset with satellite and geospatial covariates):
 
 ```bash
 CUDA_VISIBLE_DEVICES="0" python train.py \
@@ -21,6 +21,12 @@ CUDA_VISIBLE_DEVICES="0" python train.py \
     --fold_id 0 \
     --split_mode kfold \
     --split_file data/kfold5_split_train_test_indices.json
+```
+
+To run the RF training code (e.g. on the tax order task)
+```bash
+python train_test_RF11 \
+    --config RF11_taxOrder.yaml
 ```
 
 ### 🧪 Demo / Inference
