@@ -13,9 +13,9 @@ import argparse
 import yaml
 import sys
 
-RF11_COVAR_NAMES = ['band_25', 'band_26', 'band_27', 'band_28', 'band_29', 'band_30', 'band_31', 'band_33', 'band_34', 
-                    'aspct_4_band_1', 'elevation_full_10m_3338_band_1', 'maxc_4_band_1', 'sl_4_band_1', 'spi_band_1', 
-                     'swi_10_band_1', 'tpi_4_band_1', 'ppt_annual_band_1', 'tmean_swi_band_1', 'tmin_january_band_1', 'lon', 'lat']
+SAT_COVARS = ['band_25', 'band_26', 'band_27', 'band_28', 'band_29', 'band_30', 'band_31', 'band_33', 'band_34']
+TOPO_COVARS = ['aspct_4_band_1', 'elevation_full_10m_3338_band_1', 'maxc_4_band_1', 'sl_4_band_1', 'spi_band_1', 'swi_10_band_1', 'tpi_4_band_1']
+CLIMATE_COVARS = ['ppt_annual_band_1', 'tmean_swi_band_1', 'tmin_january_band_1']
 
 def load_data(args):
     # Load K-Folds
@@ -25,18 +25,16 @@ def load_data(args):
         
     # Load covars and gt
     point_data_gdf = gpd.read_file(args.sat_data_pt)
+    point_data_gdf = point_data_gdf[SAT_COVARS + ['id']]
     topo_covar_gdf = pd.read_csv(args.topo_data_pt)
+    topo_covar_gdf = topo_covar_gdf[TOPO_COVARS + ['id']]
     climate_covar_gdf = pd.read_csv(args.climate_data_pt)
+    climate_covar_gdf = climate_covar_gdf[CLIMATE_COVARS + ['id']]
 
     gt_df = pd.read_json(args.json_gt)
 
     # Preprocessing covars and gt
     gt_df['aksdb_dts'] = pd.to_datetime(gt_df['aksdb_dts'])
-    gt_df['aksdb_pf1m_bin'] = pd.to_numeric(
-        gt_df['aksdb_pf1m_bin'], errors='coerce'
-    )
-    overlap_cols = set(gt_df.columns).intersection(point_data_gdf.columns) - {"id"}
-    point_data_gdf = point_data_gdf.drop(columns=overlap_cols)
     point_data_gdf = gt_df.merge(
         point_data_gdf,
         how="left",
@@ -50,7 +48,6 @@ def load_data(args):
     merged_df = merged_df.merge(climate_covar_gdf, on="id", how="inner")
     assert merged_df.shape[0] == initial_rows, "Row count changed after climate merge"
 
-    print("Shape of all points:", point_data_gdf.shape)
     return merged_df, fold_indices
     
 def main(args):
@@ -80,9 +77,11 @@ def main(args):
         eval_func = utils.run_binary_metric
     print('Post prep shape: ', prep_data_df.shape)
         
-    X = prep_data_df[RF11_COVAR_NAMES].to_numpy()
+    covars = SAT_COVARS + TOPO_COVARS + CLIMATE_COVARS
+    X = prep_data_df[covars].to_numpy()
     y = prep_data_df[y_var].to_numpy()
     indices = prep_data_df['id'].to_list()
+
     print('X shape: ', X.shape)
     print('Y shape: ', y.shape)
     
